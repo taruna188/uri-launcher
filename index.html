@@ -50,38 +50,32 @@
         <p class="text-xl text-gray-700 font-semibold">
             Attempting to launch the application...
         </p>
-        <p class="mt-4 text-gray-500">
-            If nothing happens, your browser may not support this protocol, or the application might not be installed.
-        </p>
-        <a id="fallbackLink" href="#" class="mt-6 inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
-            Try again manually
-        </a>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const uri = params.get('uri');
+            const blankPage = params.has('blank');
 
             const launcherContainer = document.getElementById('launcher-container');
             const redirectMessage = document.getElementById('redirect-message');
-            const fallbackLink = document.getElementById('fallbackLink');
             
             // Check if the URI query parameter is present
             if (uri) {
-                // Show the redirect message and hide the generator
-                launcherContainer.classList.add('hidden');
-                redirectMessage.classList.remove('hidden');
-
                 // Decode the URI to handle special characters
                 const decodedUri = decodeURIComponent(uri);
-                
-                // Set the fallback link
-                fallbackLink.href = decodedUri;
 
+                // Check for the 'blank' parameter for blank page
+                if (blankPage) {
+                    document.body.innerHTML = '';
+                } else {
+                    // Show the redirect message as a fallback
+                    redirectMessage.classList.remove('hidden');
+                }
+                
                 // Attempt to open the URI handler
                 window.location.href = decodedUri;
-
             } else {
                 // If the URI parameter is not present, show the generator
                 launcherContainer.classList.remove('hidden');
